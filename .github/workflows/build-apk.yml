@@ -1,13 +1,15 @@
 name: Build Folia Android APK
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main ]
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: 拉取代码
         uses: actions/checkout@v4
+        with:
+          submodules: true
 
       - name: 配置Node.js
         uses: actions/setup-node@v4
@@ -21,7 +23,7 @@ jobs:
       - name: 构建网页产物
         run: |
           export FOLIA_DISABLE_PWA=1
-          npx vite build
+          npm run build
 
       - name: Capacitor同步安卓工程
         run: npx cap sync android
@@ -32,14 +34,14 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: 给gradlew权限
-        run: chmod +x android/gradlew
+      - name: 编译APK
+        run: |
+          cd android
+          ./gradlew assembleDebug
 
-      - name: 编译Debug APK
-        run: cd android && ./gradlew assembleDebug
-
-      - name: 上传APK
+      - name: 上传APK成品
         uses: actions/upload-artifact@v4
         with:
           name: folia-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
+
