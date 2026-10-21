@@ -6,13 +6,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: 检出仓库代码
+      - name: 检出代码
         uses: actions/checkout@v4
-
-      - name: 手动拉取全部嵌套子模块
-        run: |
-          git submodule init
-          git submodule update --init --recursive
 
       - name: 配置Node.js 20
         uses: actions/setup-node@v4
@@ -20,15 +15,15 @@ jobs:
           node-version: 20
           cache: 'npm'
 
-      - name: 安装npm依赖
+      - name: 1.安装npm依赖
         run: npm install
 
-      - name: Vite打包网页
+      - name: 2.构建网页产物
         run: |
           export FOLIA_DISABLE_PWA=1
           npx vite build
 
-      - name: Capacitor同步安卓
+      - name: 3.同步到Android工程
         run: npx cap sync android
 
       - name: 配置JDK17
@@ -37,7 +32,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Gradle编译Debug APK
+      - name: 4.生成调试APK
         run: |
           cd android
           ./gradlew assembleDebug
