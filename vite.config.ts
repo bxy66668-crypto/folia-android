@@ -2,10 +2,10 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { type ConfigEnv, type UserConfig, type ViteDevServer } from 'vite';
 import react from '@vitejs/plugin-react';
-import { commandPinyinPlugin } from './dev/pinyin/commandPinyinPlugin.mjs';
-import { traditionalLocalePlugin } from './dev/i18n/traditionalLocalePlugin.mjs';
-import { icuFoliaDataPlugin } from './dev/icuFolia/icuFoliaDataPlugin.mjs';
-import { normalizeBuildCommit, resolveBuildKind, resolveBuildRepo, resolveDevBuildKindOverride } from './dev/build/buildIdentity.mjs';
+//import { commandPinyinPlugin } from './dev/pinyin/commandPinyinPlugin.mjs';
+//import { traditionalLocalePlugin } from './dev/i18n/traditionalLocalePlugin.mjs';
+//import { icuFoliaDataPlugin } from './dev/icuFolia/icuFoliaDataPlugin.mjs';
+//import { normalizeBuildCommit, resolveBuildKind, resolveBuildRepo, resolveDevBuildKindOverride } from './dev/build/buildIdentity.mjs';
 import { VitePWA } from 'vite-plugin-pwa';
 import { execSync } from 'child_process';
 import { createHash } from 'crypto';
@@ -182,11 +182,11 @@ export default async function viteConfig(_config: ConfigEnv): Promise<UserConfig
   }
 
   // 请求 AMLL 官方 API 时 UA 里的构建身份，见 dev/build/buildIdentity.mjs
-  const buildRepo = resolveBuildRepo(process.env, () => execSync('git remote get-url origin', { stdio: ['ignore', 'pipe', 'ignore'] }).toString());
-  const buildCommit = normalizeBuildCommit(commitHash);
+  //const buildRepo = resolveBuildRepo(process.env, () => execSync('git remote get-url origin', { stdio: ['ignore', 'pipe', 'ignore'] }).toString());
+  //const buildCommit = normalizeBuildCommit(commitHash);
   // 官方 / 自部署 / 非官方：设置里的版本号、扫码诊断报告和反馈入口都会读它
   // 开发服务器可以用 FOLIA_DEV_BUILD_KIND 钉住（Playwright 用）；vite build 不认这个变量。
-  const buildKind = resolveDevBuildKindOverride(_config.command, process.env) ?? resolveBuildKind(process.env);
+  //const buildKind = resolveDevBuildKindOverride(_config.command, process.env) ?? resolveBuildKind(process.env);
 
   const appVersionLabel = process.env.APP_VERSION_LABEL?.trim() || 'Realeco';
   const appReleaseChannel = process.env.APP_RELEASE_CHANNEL?.trim().toLowerCase() || 'realeco';
@@ -266,9 +266,9 @@ export default async function viteConfig(_config: ConfigEnv): Promise<UserConfig
     },
     plugins: [
       devLyricProxyPlugin(),
-      commandPinyinPlugin(),
-      traditionalLocalePlugin(),
-      icuFoliaDataPlugin(),
+      //commandPinyinPlugin(),
+      //traditionalLocalePlugin(),
+      //icuFoliaDataPlugin(),
       react(),
       // Android APK 构建（FOLIA_DISABLE_PWA=1）禁用 Service Worker：
       // Capacitor 资产随包分发，SW 只会缓存旧构建、阻碍热更新。
